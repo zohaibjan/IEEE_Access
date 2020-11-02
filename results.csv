@@ -1,0 +1,9 @@
+Data Set,Avg Accuracy,Std. Dev 
+iris, 0.813333,0.103280
+sonar, 0.672143,0.096865
+haberman, 0.582043,0.141193
+teaching, 0.391667,0.113107
+wine, 0.769281,0.107950
+ionosphere, 0.618492,0.154509
+ecoli, 0.419340,0.048571
+pima_diabetec, 0.082023,0.023801
