@@ -1,5 +1,4 @@
 function results = runTraining(p_name , params)
-warning('off','all');
 
 data = load(p_name);
 data = [data.X , data.y];

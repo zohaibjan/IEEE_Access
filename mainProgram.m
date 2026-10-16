@@ -1,4 +1,4 @@
-function program = mainProgram()
+function mainProgram()
 
 % Problem = dataSetNames();                 % Get list of dataset names
 addpath(genpath('P-Data'));
@@ -18,7 +18,7 @@ params.kernelFunctionSVM={'gaussian','polynomial','linear'};
 %% MAIN LOOP
 params.noOfClusters = 5;
 
-parfor i=1:length(Problem)
+for i=1:length(Problem)
     p_name = Problem{i};
     disp(p_name);
     results = runTraining(p_name, params);

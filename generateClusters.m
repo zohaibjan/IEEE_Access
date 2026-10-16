@@ -1,4 +1,4 @@
-function genClusters = clusterData(Xtrain, Ytrain , params)
+function genClusters = generateClusters(Xtrain, Ytrain , params)
     noOfClusters = params.noOfClusters;
     totalClusters = 1;
     genClusters = {};
