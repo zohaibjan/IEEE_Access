@@ -1,4 +1,8 @@
-function classifier = getCNN(X, y)
+function classifier = getCNN(X, y, maxEpochs)
+if nargin < 3
+    maxEpochs = 500;
+end
+validateattributes(maxEpochs, {'numeric'}, {'scalar', 'integer', 'positive'});
 height = size(X,2);
 y = categorical(y);
 noOfClasses = length(unique(y));
@@ -20,7 +24,7 @@ layers = [
     classificationLayer];
 
 options = trainingOptions('sgdm',...
-    'MaxEpochs',500, ...
+    'MaxEpochs',maxEpochs, ...
     'Verbose',false...
 );
 
