@@ -44,6 +44,10 @@ The seed is a starting point for recording runs; nested seed resets, parallel wo
 
 The active path is a CNN clustering variant; the paper title alone does not establish exact reproduction. CNN categorical predictions now convert by their numeric names before voting. Cluster balancing retains already balanced subsets, selects by feature-space Euclidean distance and excludes rows already present. These changes replace the historical signed-distance and dropped-cluster behavior and require fresh results. `Main.m` is a separately attributed binary-PSO example, not the ensemble entry point.
 
+## Runtime follow-up — October 2026
+
+getCNN accepts an optional epoch budget for smoke tests; the default research training budget remains unchanged.
+
 ## Correctness review — October 2026
 
 This pass fixes implementation defects; it does not validate the associated research results. Changes can alter model pools, predictions and measured scores. Re-run the experiments before comparing corrected code with historical CSVs or published results.
@@ -55,6 +59,6 @@ This pass fixes implementation defects; it does not validate the associated rese
 
 See [the code review](docs/code-review.md) for repository-specific changes, tests and remaining limitations.
 
-**Validation:** all MATLAB sources were statically parsed/linted with MISS_HIT. MATLAB and its learner toolboxes are unavailable in the review environment. The MATLAB regression suites and full training runs have **not been executed** here. Run `runtests('tests')` and `assertSuccess(results)` in MATLAB before using the corrected experiments.
+**Validation:** 13 regression/smoke tests passed in MATLAB R2024b on Linux through [GitHub Actions](https://github.com/zohaibjan/IEEE_Access/actions/workflows/matlab-tests.yml). Tests include real toolbox execution on synthetic data. Full research datasets and published accuracy results have not been reproduced. See [validation evidence and limits](docs/validation.md).
 
 [Profile and project directory](https://github.com/zohaibjan)
