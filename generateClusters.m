@@ -7,7 +7,7 @@ function genClusters = generateClusters(Xtrain, Ytrain , params)
     for clusters=1:noOfClusters
         %% CLUSTERINGS
         % STANDARDIZE DATA BEFORE CLUSTERING
-        if length(Xtrain) > clusters
+        if size(Xtrain, 1) >= clusters
             [clusterIds, C, sum, D] = kmeans(Xtrain, clusters, 'MaxIter', 2400);                                                                          % 'MaxIter',500, 'Replicates',5,  'dist','sqeuclidean'
             for j=1:clusters
                 genClusters{totalClusters}.idxs = (clusterIds == j); % indexes of clusters

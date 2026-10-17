@@ -42,8 +42,19 @@ The seed is a starting point for recording runs; nested seed resets, parallel wo
 
 ## Review notes and reproducibility limits
 
-The repository title reflects the associated paper; the checked-in active driver is a CNN clustering variant, not proof that it reproduces every paper experiment. `Main.m` (capital M) is a separately attributed binary-PSO example and is not the ensemble entry point. Verify categorical/numeric prediction handling in `fusion.m` and the balancing distance convention before a scientific run; those methods have been preserved.
+The active path is a CNN clustering variant; the paper title alone does not establish exact reproduction. CNN categorical predictions now convert by their numeric names before voting. Cluster balancing retains already balanced subsets, selects by feature-space Euclidean distance and excludes rows already present. These changes replace the historical signed-distance and dropped-cluster behavior and require fresh results. `Main.m` is a separately attributed binary-PSO example, not the ensemble entry point.
 
-The cleanup aligns function/file names, restores visible warnings, makes CSV handles close on errors, and tests constant-feature normalisation plus CSV append behaviour. MATLAB experiments and the new utility tests have **not** been executed in the cleanup environment, which has no MATLAB installation. Static parsing is not a reproduction of the paper.
+## Correctness review — October 2026
+
+This pass fixes implementation defects; it does not validate the associated research results. Changes can alter model pools, predictions and measured scores. Re-run the experiments before comparing corrected code with historical CSVs or published results.
+
+- Label conversion uses numeric category names, not categorical indices.
+- Voting rejects empty/nonfinite inputs; a prediction failure is reported rather than counted as a fabricated class-one vote.
+- CNN output categories retain their numeric label names, including zero and nonconsecutive labels.
+- Synthetic checks cover normalization, CSV append behavior and the new prediction/selection boundaries. Additional cluster checks run where applicable.
+
+See [the code review](docs/code-review.md) for repository-specific changes, tests and remaining limitations.
+
+**Validation:** all MATLAB sources were statically parsed/linted with MISS_HIT. MATLAB and its learner toolboxes are unavailable in the review environment. The MATLAB regression suites and full training runs have **not been executed** here. Run `runtests('tests')` and `assertSuccess(results)` in MATLAB before using the corrected experiments.
 
 [Profile and project directory](https://github.com/zohaibjan)

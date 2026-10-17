@@ -1,6 +1,8 @@
-function preds = getCNNPred(net, X)
-for i = 1:size(X,1)
-    data(:,:,:,i) = X(i,:)';
+function labels = getCNNPred(net, X)
+%GETCNNPRED Preserve numeric category names returned by classify.
+if isempty(X)
+    error('Research:EmptyInput', 'Prediction input must contain samples.');
 end
-preds = classify(net, data);
+data = reshape(X.', size(X, 2), 1, 1, size(X, 1));
+labels = numericLabels(classify(net, data));
 end

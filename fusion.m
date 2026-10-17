@@ -1,13 +1,11 @@
-function acc=fusion(classifiers, X, y )
-c = length(classifiers);
-decisionMatrix = ones(length(X(:,1)), c);
-index = 1;
-for i=1:c
-    decisionMatrix(:,index) = getCNNPred(classifiers{1,i}, X);
-    index = index + 1;
+function acc = fusion(classifiers, X, y)
+%FUSION Vote using the numeric names of CNN output categories.
+if isempty(classifiers)
+    error('Research:EmptyEnsemble', 'At least one CNN is required.');
 end
-
-decisionMatrix = mode(decisionMatrix, 2);
-y=categorical(y);
-acc = mean(decisionMatrix == y);
+predictions = zeros(size(X, 1), numel(classifiers));
+for i = 1:numel(classifiers)
+    predictions(:, i) = getCNNPred(classifiers{i}, X);
+end
+acc = mean(votePredictions(predictions) == numericLabels(y));
 end

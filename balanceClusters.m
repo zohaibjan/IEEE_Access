@@ -1,49 +1,27 @@
 function balancedClusters = balanceClusters(allClusters, data)
-noOfClasses = unique(data(:,end));
-balancedClusters = {};
-b_index = 1;
-for i = 1:size(allClusters,2)
-    y = data(allClusters{i}.idxs, end);
-    classes = unique(y);
-    a = zeros(1,length(noOfClasses));
-    index=1;
-    for z=1:length(classes)
-        a(1,index) = sum(y==classes(z));
-        index= index + 1;
+%BALANCECLUSTERS Keep balanced clusters and fill class deficits without duplicates.
+classes = unique(data(:, end));
+balancedClusters = cell(1, numel(allClusters));
+for i = 1:numel(allClusters)
+    members = logical(allClusters{i}.idxs(:));
+    base = data(members, :);
+    if isempty(base)
+        error('Research:InvalidCluster', 'Clusters must contain at least one row.');
     end
-
-    if max(a)-min(a) ~= 0
-        for k=1:length(noOfClasses)
-            if sum(y==noOfClasses(k)) == max(a)
-                balancedClusters{1,b_index} = data(allClusters{i}.idxs,:);
-                continue;
-            end
-        end
-        for k=1:length(noOfClasses)
-            if sum(y==noOfClasses(k)) ~= max(a)
-                records = max(a) - sum(y==noOfClasses(k));
-                toAdd = data(data(:,end)==noOfClasses(k),:);
-                closestToCentroid = zscore(double(toAdd(:,1:end-1)))-allClusters{i}.centroids;
-                closestToCentroid = sum(closestToCentroid,2);
-                
-                distances = unique(closestToCentroid);
-                
-                for d = 1:length(distances)
-                    count =  sum(closestToCentroid == distances(d));
-                    records = records - count;
-                    if records >= 0
-                        balancedClusters{1,b_index} = [balancedClusters{1,b_index}; toAdd(closestToCentroid == distances(d),:)];
-                    end
-                    if records < 0
-                       break; 
-                    end
-                end
-            end
-        end
-        b_index = b_index + 1;
+    counts = zeros(size(classes));
+    for j = 1:numel(classes)
+        counts(j) = sum(base(:, end) == classes(j));
     end
-    
+    target = max(counts);
+    balancedClusters{i} = base;
+    centroid = allClusters{i}.centroids;
+    for j = 1:numel(classes)
+        need = target - counts(j);
+        candidates = data(~members & data(:, end) == classes(j), :);
+        offsets = bsxfun(@minus, candidates(:, 1:end-1), centroid);
+        [~, order] = sort(sum(offsets .^ 2, 2));
+        count = min(need, size(candidates, 1));
+        balancedClusters{i} = [balancedClusters{i}; candidates(order(1:count), :)];
+    end
 end
-
-
 end
